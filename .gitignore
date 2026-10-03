@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.tmp
+
+# Environment & Sessions (CRITICAL: Never commit credentials or sessions)
+.env
+*.session
+*.session-journal
+progress.json
+automation.log
+
+# Virtual Environment
+.venv/
+venv/
+ENV/

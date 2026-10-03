@@ -1,0 +1,13 @@
+{
+  "bot_username": "@save_restricted_contentpro_bot",
+  "timeout_seconds": 300,
+  "delay_between_links": 3,
+  "loops": [
+    {
+      "name": "Test Loop",
+      "base_link": "https://t.me/c/3548255677/15/",
+      "start_id": 25,
+      "end_id": 27
+    }
+  ]
+}
