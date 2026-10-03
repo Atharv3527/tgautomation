@@ -148,7 +148,7 @@ class TestStateManager(unittest.TestCase):
             api_hash="abcdef",
             phone=None,
             session_name="test",
-            bot_username="@save_restricted_contentpro_bot",
+            bot_username="@save_restricted_content004_bot",
             timeout_seconds=600,
             delay_between_links=3,
             loops=[

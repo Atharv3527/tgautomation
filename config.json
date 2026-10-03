@@ -1,13 +1,13 @@
 {
-  "bot_username": "@save_restricted_contentpro_bot",
+  "bot_username": "@save_restricted_content004_bot",
   "timeout_seconds": 600,
   "delay_between_links": 3,
   "loops": [
     {
-      "name": "Loop 1",
+      "name": "WhatsApp Loop",
       "base_link": "https://t.me/c/3548255677/157/",
-      "start_id": 168,
-      "end_id": 177
+      "start_id": 25,
+      "end_id": 26
     }
   ]
 }

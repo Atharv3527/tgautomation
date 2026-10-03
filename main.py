@@ -200,6 +200,22 @@ async def main():
         type=float,
         help="Timeout in seconds to wait for video (default: 600, use 0 for infinite)",
     )
+    parser.add_argument(
+        "--webhook",
+        action="store_true",
+        help="Run WhatsApp webhook server concurrently in background (port 5000)",
+    )
+    parser.add_argument(
+        "--webhook-port",
+        type=int,
+        default=5000,
+        help="Port for WhatsApp webhook server (default: 5000)",
+    )
+    parser.add_argument(
+        "--auto-start",
+        action="store_true",
+        help="Automatically start processing immediately on launch (default: false, starts paused)",
+    )
     args = parser.parse_args()
 
     logger = setup_logger()
@@ -296,6 +312,19 @@ async def main():
             daemon=True,
         )
         t.start()
+
+        # Start WhatsApp webhook background server if enabled
+        if args.webhook:
+            from whatsapp_webhook import start_webhook_background
+
+            start_webhook_background(automation=automation, port=args.webhook_port)
+            logger.info(
+                f"WhatsApp Webhook Server active on port {args.webhook_port} (Commands: START, STOP, STATUS)"
+            )
+
+        if not args.auto_start:
+            logger.info("Automation is currently IDLE. Send 'START' or /start to begin.")
+            automation.pause()
 
         # Run automation
         await automation.run()

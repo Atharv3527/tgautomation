@@ -2,7 +2,7 @@
 
 A reliable, sequential Telegram automation built with **Telethon** and **Python 3**. 
 
-It automates sending Telegram message links to a processing bot (`@save_restricted_contentpro_bot`) and strictly **waits for the actual video media response** before sending the next link in the sequence.
+It automates sending Telegram message links to a processing bot (`@save_restricted_content004_bot`) and strictly **waits for the actual video media response** before sending the next link in the sequence.
 
 ---
 
@@ -54,10 +54,10 @@ To use Telethon with your personal account, Telegram requires an **API ID** and 
    TELEGRAM_API_HASH=abcdef0123456789abcdef0123456789
    TELEGRAM_PHONE=+1234567890
    TELEGRAM_SESSION=telegram_automation
-   BOT_USERNAME=@save_restricted_contentpro_bot
+   BOT_USERNAME=@save_restricted_content004_bot
    ```
 
-> ⚠️ **Important:** Ensure you have opened a chat with **`@save_restricted_contentpro_bot`** in your Telegram app and clicked **Start** at least once so your account can message it.
+> ⚠️ **Important:** Ensure you have opened a chat with **`@save_restricted_content004_bot`** in your Telegram app and clicked **Start** at least once so your account can message it.
 
 ---
 
@@ -94,7 +94,7 @@ Once the test is confirmed working, you can run the full automation:
 1. Review or customize [`config.json`](file:///d:/telegram-automation/config.json):
    ```json
    {
-     "bot_username": "@save_restricted_contentpro_bot",
+     "bot_username": "@save_restricted_content004_bot",
      "timeout_seconds": 600,
      "delay_between_links": 3,
      "loops": [
@@ -154,6 +154,56 @@ In the running terminal window, you can type anytime:
 
 ## 🛠 Advanced Options
 
-- **Resume After Interruption:** Simply re-run `.venv\Scripts\python main.py`. It reads `progress.json` and resumes automatically from the next unprocessed ID.
+- **Resume After Interruption (Laptop Restart, Crash, etc.):** 
+  Simply re-run `.venv\Scripts\python main.py`. It reads `progress.json` and resumes automatically from the exact ID it left off at without skipping or resending confirmed videos. By default, the script starts **IDLE** waiting for a `START` or `RESUME` command. 
+- **Auto-Start:** 
+  Use the `--auto-start` flag to start sending links immediately instead of starting paused:
+  `.venv\Scripts\python main.py --auto-start`
 - **Infinite Waiting:** In `config.json`, set `"timeout_seconds": null` to wait indefinitely for the bot's video response.
 - **Change Delay:** Adjust `"delay_between_links": 3` (in seconds) to comply with any bot rate limits.
+
+---
+
+## 📱 WhatsApp Webhook Server
+
+A modular Flask webhook server is available in [`whatsapp_webhook.py`](file:///d:/telegram-automation/whatsapp_webhook.py) to receive incoming WhatsApp messages and Meta webhook verification.
+
+### 1. Configure Verification Token
+In [`.env`](file:///d:/telegram-automation/.env):
+```env
+HUB_VERIFY_TOKEN=your_verify_token_here
+```
+
+### 2. Run Options
+
+**Option A: Integrated with Telegram Automation (Single Command)**
+```powershell
+.venv\Scripts\python main.py --webhook
+```
+*Runs the Telegram video automation and the WhatsApp webhook server concurrently. Incoming WhatsApp messages will directly control the automation!*
+
+**Option B: Standalone Webhook Server**
+```powershell
+.venv\Scripts\python whatsapp_webhook.py
+```
+*Runs on port 5000 (`http://localhost:5000/webhook`) and displays incoming messages in the terminal.*
+
+### 3. WhatsApp Commands
+Send any of the following to your connected WhatsApp business number:
+- `STATUS` — Displays active loop, processed IDs, current URL, and progress percentage.
+- `STOP` or `PAUSE` — Safely pauses the Telegram video loop without losing progress.
+- `RESUME` — Resumes processing the currently saved loop from where it left off.
+- `START <telegram_base_url> <start_id> <end_id>` — Creates a fresh active loop, resets progress for that loop, and begins processing.
+  *(Example: `START https://t.me/c/3548255677/157/ 25 45`)*
+
+*(Optional)*: Set `WHATSAPP_TOKEN` and `WHATSAPP_PHONE_NUMBER_ID` in `.env` to automatically send replies and status summaries back to the sender on WhatsApp.
+
+### 4. Security Notes
+- **Environment Variables**: Never commit `.env` or your `.session` files to version control. They are protected by `.gitignore`.
+- **Allowed Senders**: To prevent unauthorized users from controlling your automation, set `ALLOWED_WHATSAPP_NUMBER` in your `.env`. Example: `ALLOWED_WHATSAPP_NUMBER=919356711936`. Any commands from other numbers will be safely ignored.
+- **Webhooks**: Your webhook token (`HUB_VERIFY_TOKEN`) is stored securely in your `.env`.
+
+### 4. Endpoints
+- `GET /` — Health check endpoint.
+- `GET /webhook` — Meta Webhook verification (`hub.mode`, `hub.verify_token`, `hub.challenge`).
+- `POST /webhook` — Receives incoming WhatsApp messages, extracts text, prints clearly in terminal, and dispatches automation commands.
