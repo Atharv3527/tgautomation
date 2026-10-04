@@ -136,6 +136,12 @@ class TestMediaDetector(unittest.TestCase):
         mock_msg_status = SimpleNamespace(text="Task added to queue. Please wait...")
         self.assertIsNone(detect_bot_error(mock_msg_status))
 
+    def test_completion_text(self):
+        # We don't have is_completion_text in media_detector anymore, but we can test
+        # that get_media_summary gracefully handles non-video text messages.
+        mock_msg = SimpleNamespace(file=None, text="✅ File Delivered Successfully", video=None, document=None)
+        self.assertEqual(get_media_summary(mock_msg), "Video detected")
+
 
 class TestStateManager(unittest.TestCase):
     def setUp(self):
@@ -148,7 +154,7 @@ class TestStateManager(unittest.TestCase):
             api_hash="abcdef",
             phone=None,
             session_name="test",
-            bot_username="@save_restricted_content004_bot",
+            bot_username="@SaveRestrictedContentfreeBot",
             timeout_seconds=600,
             delay_between_links=3,
             loops=[

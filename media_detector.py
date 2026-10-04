@@ -134,3 +134,25 @@ def detect_bot_error(message) -> Optional[str]:
             return text
 
     return None
+
+
+LOGIN_INDICATORS = [
+    "login required",
+    "already in the middle of logging in",
+    "must /login to extract",
+    "please reply to the prompt or click /cancel_login"
+]
+
+def detect_login_requirement(message) -> bool:
+    """
+    Returns True if the message indicates the bot is blocked by a login state.
+    """
+    if not message or not getattr(message, "text", None):
+        return False
+
+    text_lower = message.text.strip().lower()
+    for indicator in LOGIN_INDICATORS:
+        if indicator in text_lower:
+            return True
+
+    return False

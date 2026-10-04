@@ -205,6 +205,13 @@ class TestWhatsAppWebhook(unittest.TestCase):
         # Mock automation object
         mock_automation = MagicMock()
         mock_automation.get_status_summary.return_value = "Status: Running 10/20"
+        mock_automation.config.bot_username = "@SaveRestrictedContentfreeBot"
+        mock_automation._current_task = {
+            "loop_idx": 0,
+            "loop_name": "Test",
+            "msg_id": 25,
+            "url": "https://test",
+        }
 
         # Mock WhatsApp client for outbound replies
         mock_client = MagicMock(spec=WhatsAppClient)
@@ -223,9 +230,8 @@ class TestWhatsAppWebhook(unittest.TestCase):
         )
         handler.process_message(msg_start)
         mock_automation.resume.assert_called_once()
-        mock_client.send_text_message.assert_called_with(
-            "+123456789", "▶️ Telegram Automation has been RESUMED."
-        )
+        args, _ = mock_client.send_text_message.call_args
+        self.assertIn("▶️ AUTOMATION RESUMED", args[1])
 
         # 1.5 Send START command with URL args
         mock_automation.resume.reset_mock()
@@ -246,11 +252,14 @@ class TestWhatsAppWebhook(unittest.TestCase):
         self.assertEqual(mock_automation.config.loops[0].end_id, 27)
         mock_automation.state_mgr.reset.assert_called_once()
         mock_automation.resume.assert_called_once()
-        mock_client.send_text_message.assert_called_with(
-            "+123456789", "▶️ Created new loop: https://t.me/c/3548255677/157/ [25..27]. Resuming..."
-        )
+        args, _ = mock_client.send_text_message.call_args
+        self.assertIn("🚀 AUTOMATION STARTED", args[1])
 
         # 2. Send STOP command
+        mock_automation._is_running = True
+        mock_automation._is_stopped = False
+        mock_automation._current_task = {'msg_id': 25}
+        
         msg_stop = WhatsAppMessage(
             sender="+123456789",
             sender_name="Alice",
@@ -259,10 +268,25 @@ class TestWhatsAppWebhook(unittest.TestCase):
             text="STOP",
         )
         handler.process_message(msg_stop)
-        mock_automation.pause.assert_called_once()
-        mock_client.send_text_message.assert_called_with(
-            "+123456789", "⏸ Telegram Automation has been PAUSED."
-        )
+        mock_automation.stop.assert_called_once()
+        args, _ = mock_client.send_text_message.call_args
+        self.assertIn("🛑 AUTOMATION STOPPED", args[1])
+        
+        # 2.5 Send /stop, stop, STOP with spaces
+        for idx, text_variation in enumerate(["/stop", "stop", " STOP "]):
+            msg_var = WhatsAppMessage(
+                sender="+123456789",
+                sender_name="Alice",
+                message_id=f"id-2.5.{idx}",
+                timestamp="1672531199",
+                text=text_variation,
+            )
+            # Reset mock to verify it gets called again
+            mock_automation.stop.reset_mock()
+            mock_automation._is_running = True
+            mock_automation._is_stopped = False
+            handler.process_message(msg_var)
+            mock_automation.stop.assert_called_once()
 
         # 3. Send STATUS command
         msg_status = WhatsAppMessage(
@@ -318,7 +342,8 @@ class TestWhatsAppWebhook(unittest.TestCase):
         handler.process_message(msg)
         
         mock_automation.resume.assert_called_once()
-        mock_client.send_text_message.assert_called_with("+1", "▶️ Telegram Automation has been RESUMED.")
+        args, _ = mock_client.send_text_message.call_args
+        self.assertIn("▶️ AUTOMATION RESUMED", args[1])
 
 if __name__ == "__main__":
     unittest.main()
