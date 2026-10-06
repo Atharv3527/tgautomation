@@ -5,7 +5,7 @@
   "loops": [
     {
       "name": "WhatsApp Loop",
-      "base_link": "https://t.me/c/3548255677/157/",
+      "base_link": "https://t.me/c/3548255677/",
       "start_id": 227,
       "end_id": 236
     }
