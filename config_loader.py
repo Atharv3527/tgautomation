@@ -55,7 +55,7 @@ def load_app_config(
         load_dotenv(override=False)
 
     # Defaults
-    bot_username = os.getenv("BOT_USERNAME", "@SaveRestrictedContentfreeBot").strip()
+    bot_username = os.getenv("BOT_USERNAME", "@save_restricted_contentpro_bot").strip()
     session_name = os.getenv("TELEGRAM_SESSION", "telegram_automation").strip()
     session_string = os.getenv("TELEGRAM_STRING_SESSION", "").strip() or None
     phone = os.getenv("TELEGRAM_PHONE", "").strip() or None

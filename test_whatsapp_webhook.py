@@ -205,7 +205,7 @@ class TestWhatsAppWebhook(unittest.TestCase):
         # Mock automation object
         mock_automation = MagicMock()
         mock_automation.get_status_summary.return_value = "Status: Running 10/20"
-        mock_automation.config.bot_username = "@SaveRestrictedContentfreeBot"
+        mock_automation.config.bot_username = "@save_restricted_contentpro_bot"
         mock_automation._current_task = {
             "loop_idx": 0,
             "loop_name": "Test",

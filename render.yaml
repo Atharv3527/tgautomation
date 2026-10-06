@@ -13,4 +13,4 @@ services:
       - key: TELEGRAM_STRING_SESSION
         sync: false
       - key: BOT_USERNAME
-        value: "@SaveRestrictedContentfreeBot"
+        value: "@save_restricted_contentpro_bot"

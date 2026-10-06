@@ -2,7 +2,7 @@
 
 A reliable, sequential Telegram automation built with **Telethon** and **Python 3**. 
 
-It automates sending Telegram message links to a processing bot (`@SaveRestrictedContentfreeBot`) and strictly **waits for the actual video media response** before sending the next link in the sequence.
+It automates sending Telegram message links to a processing bot (`@save_restricted_contentpro_bot`) and strictly **waits for the actual video media response** before sending the next link in the sequence.
 
 ---
 
@@ -54,10 +54,10 @@ To use Telethon with your personal account, Telegram requires an **API ID** and 
    TELEGRAM_API_HASH=abcdef0123456789abcdef0123456789
    TELEGRAM_PHONE=+1234567890
    TELEGRAM_SESSION=telegram_automation
-   BOT_USERNAME=@SaveRestrictedContentfreeBot
+   BOT_USERNAME=@save_restricted_contentpro_bot
    ```
 
-> ⚠️ **Important:** Ensure you have opened a chat with **`@SaveRestrictedContentfreeBot`** in your Telegram app and clicked **Start** at least once so your account can message it.
+> ⚠️ **Important:** Ensure you have opened a chat with **`@save_restricted_contentpro_bot`** in your Telegram app and clicked **Start** at least once so your account can message it.
 
 ---
 
@@ -94,7 +94,7 @@ Once the test is confirmed working, you can run the full automation:
 1. Review or customize [`config.json`](file:///d:/telegram-automation/config.json):
    ```json
    {
-     "bot_username": "@SaveRestrictedContentfreeBot",
+     "bot_username": "@save_restricted_contentpro_bot",
      "timeout_seconds": 600,
      "delay_between_links": 3,
      "loops": [

@@ -8,7 +8,7 @@ from config_loader import AppConfig
 class TestBotAutomationCancel(unittest.IsolatedAsyncioTestCase):
     def setUp(self):
         self.config = MagicMock(spec=AppConfig)
-        self.config.bot_username = "@SaveRestrictedContentfreeBot"
+        self.config.bot_username = "@save_restricted_contentpro_bot"
         self.state_mgr = MagicMock()
         self.client = MagicMock()
         self.bot = BotAutomation(self.client, self.config, self.state_mgr)
