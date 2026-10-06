@@ -35,6 +35,7 @@ class AppConfig:
     api_hash: Optional[str]
     phone: Optional[str]
     session_name: str
+    session_string: Optional[str]
     bot_username: str
     timeout_seconds: Optional[float]
     delay_between_links: float
@@ -56,6 +57,7 @@ def load_app_config(
     # Defaults
     bot_username = os.getenv("BOT_USERNAME", "@SaveRestrictedContentfreeBot").strip()
     session_name = os.getenv("TELEGRAM_SESSION", "telegram_automation").strip()
+    session_string = os.getenv("TELEGRAM_STRING_SESSION", "").strip() or None
     phone = os.getenv("TELEGRAM_PHONE", "").strip() or None
     timeout_seconds: Optional[float] = 600.0
     delay_between_links: float = 3.0
@@ -113,6 +115,7 @@ def load_app_config(
         api_hash=api_hash,
         phone=phone,
         session_name=session_name,
+        session_string=session_string,
         bot_username=bot_username,
         timeout_seconds=timeout_seconds,
         delay_between_links=delay_between_links,

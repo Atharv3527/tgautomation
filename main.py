@@ -284,7 +284,9 @@ async def main():
 
     # Initialize Telethon Client
     logger.info("Connecting to Telegram...")
-    client = TelegramClient(config.session_name, config.api_id, config.api_hash)
+    from telethon.sessions import StringSession
+    session_data = StringSession(config.session_string) if config.session_string else config.session_name
+    client = TelegramClient(session_data, config.api_id, config.api_hash)
 
     automation = BotAutomation(
         client=client,

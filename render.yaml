@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: telegram-automation
+    env: python
+    buildCommand: pip install -r requirements.txt
+    # Binds the internal webhook server to the $PORT Render provides
+    startCommand: python main.py --webhook --webhook-port $PORT --auto-start
+    envVars:
+      - key: TELEGRAM_API_ID
+        sync: false
+      - key: TELEGRAM_API_HASH
+        sync: false
+      - key: TELEGRAM_STRING_SESSION
+        sync: false
+      - key: BOT_USERNAME
+        value: "@SaveRestrictedContentfreeBot"
