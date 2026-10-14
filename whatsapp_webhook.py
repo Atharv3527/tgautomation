@@ -592,12 +592,23 @@ def create_app(
 
     @app.route("/", methods=["GET"])
     def index():
-        """Health check endpoint."""
+        """Root info endpoint."""
         return jsonify(
             {
                 "status": "online",
                 "service": "WhatsApp Webhook Server",
                 "webhook_path": "/webhook",
+            }
+        ), 200
+
+    @app.route("/health", methods=["GET"])
+    def health_check():
+        """Health check endpoint for UptimeRobot / uptime monitors."""
+        return jsonify(
+            {
+                "success": True,
+                "status": "ok",
+                "timestamp": datetime.utcnow().isoformat() + "Z",
             }
         ), 200
 
